@@ -147,6 +147,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="lib\Arduino\ReadFile.cpp" />
+    <ClCompile Include="lib\Arduino\Strip.cpp" />
+    <ClCompile Include="src\Data\CharArray.cpp" />
+    <ClCompile Include="src\LedsController.cpp" />
     <ClCompile Include="lib\Arduino\Arduino.cpp" />
     <ClCompile Include="src\Data\CRGB.cpp" />
     <ClCompile Include="src\Executer.cpp" />

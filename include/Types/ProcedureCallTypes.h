@@ -11,13 +11,13 @@ struct procedure_info {
 using ArgsArray = Array<dbyte, ::byte>;
 class Procedure;
 struct CallProcedureInt {
-	virtual Procedure* operator() (::byte, CharArrayView, const ArgsArray&) = 0;
+	virtual Procedure* operator() (::byte, CharArrayConstView, const ArgsArray&) = 0;
 };
 
 class CallProcedureFnc {
 public:
 	CallProcedureFnc(CallProcedureInt& cpi);
-	Procedure* operator() (::byte id, CharArrayView args, const ArgsArray& args_arr);
+	Procedure* operator() (::byte id, CharArrayConstView args, const ArgsArray& args_arr);
 private:
 	CallProcedureInt& t_cpi;
 };

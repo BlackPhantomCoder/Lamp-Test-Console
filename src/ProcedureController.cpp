@@ -18,12 +18,12 @@ ProcedureController::ProcedureController(
 {
 }
 
-::byte ProcedureController::count()
+::byte ProcedureController::count()const
 {
     return t_procedures.size();
 }
 
-Procedure* ProcedureController::call_procedure(::byte id, CharArrayView args, const ArgsArray& values, call_procedure_fnc fnc)
+Procedure* ProcedureController::call_procedure(::byte id, CharArrayConstView args, const ArgsArray& values, call_procedure_fnc fnc)
 {
     auto procedure_info = t_procedures[id];
     t_program.set_next_pos(procedure_info.pos);
@@ -45,13 +45,13 @@ ProcedureController make_ProcedureController(Program& program, LedsController32&
         return ProcedureController(ProcedureArray(), core, ex_funcs, program);
     }
     else {
-        auto args = CharArrayView(cmd_pair.second);
+        auto args = CharArrayConstView(cmd_pair.second);
 
         RAM ram(TypeController(0, 0, 0), core);
-        auto size = ram.get_val(get_argby_ref(args));
+        auto size = static_cast<byte>(ram.get_val(get_argby_ref(args)));
         ProcedureArray procedures(size);
-        for (dbyte i = 0; i < size; ++i) {
-            procedures[i].args_count = ram.get_val(get_argby_ref(args));
+        for (decltype(size) i = 0; i < size; ++i) {
+            procedures[i].args_count = static_cast<byte>(ram.get_val(get_argby_ref(args)));
             procedures[i].pos = ram.get_val(get_argby_ref(args)) + now_pos;
         }
 

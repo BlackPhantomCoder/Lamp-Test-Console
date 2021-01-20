@@ -9,13 +9,22 @@
 #include "Executer.h"
 #include "Types/ProgramTypes.h"
 
+//Procedure
 class Procedure {
 public:
+	Procedure(Procedure&& rh);
+	Procedure(const Procedure& rh) = delete;
+
 	Procedure(Program& program, const RAM& ram, ExternalFuncs& ex_funcs, call_procedure_fnc call_fnc);
 	~Procedure();
 
+	Procedure& operator=(const Procedure& rh) = delete;
+
+	//execute command/commands(for,while,if-else,other Procedure)
 	command update();
+	//stop 
 	void stop();
+	//reset 
 	void reset();
 private:
 	enum class processor_type
@@ -39,7 +48,7 @@ private:
 	CmdExecuter t_executer;
 	bool t_stop;
 	CharArray t_args_container;
-	CharArrayView t_args;
+	CharArrayConstView t_args;
 	dbyte t_begin;
 	pair<Procedure*, dbyte> t_sub_procedure;
 };

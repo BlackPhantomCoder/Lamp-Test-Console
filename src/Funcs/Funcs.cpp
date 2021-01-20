@@ -1,8 +1,8 @@
 #include "Funcs/Funcs.h"
 
-CharArrayView get_argby_ref(CharArrayView& str, char symbol)
+CharArrayConstView get_argby_ref(CharArrayConstView& str, char symbol)
 {
-    CharArrayView result(str);
+    CharArrayConstView result(str);
     ::byte i = 0u;
     while (i != str.size() && str[i] != symbol) {
         ++i;
@@ -12,9 +12,9 @@ CharArrayView get_argby_ref(CharArrayView& str, char symbol)
     return result;
 }
 
-CharArrayView get_argby(CharArrayView str, char symbol)
+CharArrayConstView get_argby(CharArrayConstView str, char symbol)
 {
-    CharArrayView result(str);
+    CharArrayConstView result(str);
     ::byte i = 0u;
     while (i != str.size() && str[i] != symbol) {
         ++i;
@@ -23,40 +23,40 @@ CharArrayView get_argby(CharArrayView str, char symbol)
     return result;
 }
 
-CharArrayView get_arg_ref(CharArrayView& str, ::byte offset)
+CharArrayConstView get_arg_ref(CharArrayConstView& str, ::byte offset)
 {
-    CharArrayView result(str);
+    CharArrayConstView result(str);
     result.remove_end(str.size() - offset);
     str.remove_beg(offset);
     return result;
 }
 
-types get_types_ref(CharArrayView& arg) {
+types get_types_ref(CharArrayConstView& arg) {
     char result = arg[0];
     arg.remove_beg(1);
     return types(result);
 }
 
-exdata_type get_exdtype_ref(CharArrayView& arg) {
+exdata_type get_exdtype_ref(CharArrayConstView& arg) {
     char result = arg[0];
     arg.remove_beg(1);
     return exdata_type(result);
 }
 
-::byte read_byte_ref(CharArrayView& arg) {
+::byte read_byte_ref(CharArrayConstView& arg) {
     char l = arg[1];
     arg.remove_beg(2);
     return l;
 }
 
-dbyte read_dbyte_ref(CharArrayView& arg) {
+dbyte read_dbyte_ref(CharArrayConstView& arg) {
     char h = arg[1];
     char l = arg[2];
     arg.remove_beg(3);
     return (h << 8) + l;
 }
 
-dbyte read_num(CharArrayView arg) {
+dbyte read_num(CharArrayConstView arg) {
     switch (get_types(arg[0]))
     {
     case types::NUM_BYTE:
@@ -72,7 +72,7 @@ dbyte read_num(CharArrayView arg) {
     }
 }
 
-dbyte read_num_ref(CharArrayView& arg) {
+dbyte read_num_ref(CharArrayConstView& arg) {
     switch (get_types(arg[0]))
     {
     case types::NUM_BYTE:

@@ -3,20 +3,22 @@
 #include "Types/Types.h"
 #include "Data/CRGB.h"
 
+//RGB strip emulation
 class Adafruit_NeoPixel {
 public:
-	void clear() {
-		for (size_t i = 0; i < 32; ++i) {
-			t_data[i] = CRGB(0, 0, 0);
-		}
-	}
-	void setPixelColor(::byte pos, const uint32_t& color) {
-		t_data[pos] = CRGB(((color >> 16) & 0xff), ((color >> 8) & 0xff), (color & 0xff));
-	}
+	Adafruit_NeoPixel(Adafruit_NeoPixel&&) = default;
+	Adafruit_NeoPixel(const Adafruit_NeoPixel&) = delete;
+	Adafruit_NeoPixel() = default;
+	
+	Adafruit_NeoPixel& operator=(const Adafruit_NeoPixel&) = delete;
 
-	long getPixelColor(::byte pos) {
-		return t_data[pos];
-	}
+	//clear leds
+	void clear();
+	//set led color by pos
+	void setPixelColor(::byte pos, const uint32_t& color);
+	//get led color by pos
+	long getPixelColor(::byte pos)const;
 private:
+	//leds array
 	CRGB t_data[32];
 };

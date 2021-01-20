@@ -8,14 +8,14 @@ CmdExecuter::CmdExecuter(RAM& ram, ExternalFuncs& ex_fnc, call_procedure_fnc cal
     t_call(call_fnc)
 {}
 
-void CmdExecuter::set(CharArrayView args)
+void CmdExecuter::set(CharArrayConstView args)
 {
     const auto cell = t_ram.get_type_and_adress(get_argby_ref(args));
     const auto val = t_ram.get_val(get_argby_ref(args));
     t_ram.set_val(cell, val);
 }
 
-void CmdExecuter::swap(CharArrayView args)
+void CmdExecuter::swap(CharArrayConstView args)
 {
     const auto cell_1 = t_ram.get_type_and_adress(get_argby_ref(args));
     const auto cell_2 = t_ram.get_type_and_adress(get_argby_ref(args));
@@ -25,7 +25,7 @@ void CmdExecuter::swap(CharArrayView args)
     t_ram.set_val(cell_2, val_1);
 }
 
-void CmdExecuter::random(CharArrayView args)
+void CmdExecuter::random(CharArrayConstView args)
 {
     const auto cell = t_ram.get_type_and_adress(get_argby_ref(args));
     const auto val_1 = t_ram.get_val(get_argby_ref(args));
@@ -33,34 +33,34 @@ void CmdExecuter::random(CharArrayView args)
     t_ram.set_val(cell, ::random(val_1, val_2));
 }
 
-void CmdExecuter::cset(CharArrayView args)
+void CmdExecuter::cset(CharArrayConstView args)
 {
     const auto cell = t_ram.get_val(get_argby_ref(args));
     const auto val_1 = t_ram.get_val(get_argby_ref(args));
     const auto val_2 = t_ram.get_val(get_argby_ref(args));
     const auto val_3 = t_ram.get_val(get_argby_ref(args));
 
-    t_ram.get_leds().set(cell, CRGB(val_1, val_2, val_3));
+    t_ram.get_leds().set(static_cast<byte>(cell), CRGB(static_cast<byte>(val_1), static_cast<byte>(val_2), static_cast<byte>(val_3)));
 }
 
-void CmdExecuter::ccopy(CharArrayView args)
+void CmdExecuter::ccopy(CharArrayConstView args)
 {
     const auto cell_1 = t_ram.get_val(get_argby_ref(args));
     const auto cell_2 = t_ram.get_val(get_argby_ref(args));
 
-    t_ram.get_leds().copy(cell_1, cell_2);
+    t_ram.get_leds().copy(static_cast<byte>(cell_1), static_cast<byte>(cell_2));
 }
 
-void CmdExecuter::cswap(CharArrayView args)
+void CmdExecuter::cswap(CharArrayConstView args)
 {
     const auto cell_1 = t_ram.get_val(get_argby_ref(args));
     const auto cell_2 = t_ram.get_val(get_argby_ref(args));
-    t_ram.get_leds().swap(cell_1, cell_2);
+    t_ram.get_leds().swap(static_cast<byte>(cell_1), static_cast<byte>(cell_2));
 }
 
-void CmdExecuter::ccopyall(CharArrayView args)
+void CmdExecuter::ccopyall(CharArrayConstView args)
 {
-    const auto val = t_ram.get_val(get_argby_ref(args));
+    const auto val = static_cast<byte>(t_ram.get_val(get_argby_ref(args)));
 
     for (::byte i = 1; i < 4; ++i) {
         for (::byte j = 0; j < val; ++j) {
@@ -79,7 +79,7 @@ void CmdExecuter::draw()
     t_ex_funcs.draw();
 }
 
-void CmdExecuter::pause(CharArrayView args)
+void CmdExecuter::pause(CharArrayConstView args)
 {
     const auto val = t_ram.get_val(get_argby_ref(args));
     t_ex_funcs.pause(val);
@@ -90,13 +90,13 @@ void CmdExecuter::update()
     t_ex_funcs.update();
 }
 
-Procedure* CmdExecuter::call_procedure(CharArrayView args)
+Procedure* CmdExecuter::call_procedure(CharArrayConstView args)
 {
     const auto id = t_ram.get_val(get_argby_ref(args));
-    const auto count = t_ram.get_val(get_argby_ref(args));
+    const auto count = static_cast<byte>(t_ram.get_val(get_argby_ref(args)));
     ArgsArray args_arr(count);
-    for (dbyte i = 0; i < count; ++i) {
+    for (byte i = 0; i < count; ++i) {
         args_arr[i] = t_ram.get_val(get_argby_ref(args));
     }
-    return t_call(id, args, args_arr);
+    return t_call(static_cast<byte>(id), args, args_arr);
 }

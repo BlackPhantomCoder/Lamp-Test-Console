@@ -5,23 +5,39 @@
 #include "ReadFile.h"
 #include "Types/ProgramTypes.h"
 
+//Reads commands and args from file
 class Program {
 public:
-	Program(ReadFile& f);
-	void skip(dbyte count);
-	dbyte get_next_pos();
-	void set_next_pos(dbyte pos);
-	void set_start(dbyte pos);
-	command skip_cmd();
-	command peek_cmd();
-	pair<command, CharArray> get_cmd();
-	void get_cmd(command& ccmd, CharArray& args);
+	Program(Program&&) = default;
+	Program(const Program&) = delete;
 
-	const String& get_name()const;
+	Program(ReadFile& f);
+	~Program() = default;
+
+	Program& operator=(const Program&) = delete;
+
+	//skip count bytes
+	void skip(dbyte count);
+	//get next filepos
+	dbyte get_next_pos();
+	//set next filepos
+	void set_next_pos(dbyte pos);
+	//set start filepos
+	void set_start(dbyte pos);
+	//skip command and args
+	command skip_cmd();
+	//peek command and args
+	command peek_cmd();
+	//read command and args
+	pair<command, CharArray> get_cmd();
+	//read command and args
+	void get_cmd(command& cmd, CharArray& args);
 private:
 	command t_read_cmd();
 	::byte t_read_args_size();
 private:
+	//file
 	ReadFile& t_file;
+	//start pos
 	dbyte t_start;
 };

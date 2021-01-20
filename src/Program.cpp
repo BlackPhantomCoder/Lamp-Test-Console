@@ -2,8 +2,8 @@
 
 Program::Program(ReadFile& f):
 	t_file(f),
-	t_start(f.tell()) 
-	{}
+	t_start(static_cast<dbyte>(f.tell()))
+{}
 
 void Program::skip(dbyte count)
 {
@@ -12,7 +12,7 @@ void Program::skip(dbyte count)
 
 dbyte Program::get_next_pos()
 {
-    return t_file.tell();
+    return static_cast<dbyte>(t_file.tell());
 }
 
 void Program::set_next_pos(dbyte pos)
@@ -59,11 +59,6 @@ void Program::get_cmd(command& cmd, CharArray& args)
     for (::byte i = 0; i < count; ++i) {
         args[i] = t_file.read();
     }
-}
-
-const String& Program::get_name() const
-{
-    return t_file.get_name();
 }
 
 command Program::t_read_cmd()

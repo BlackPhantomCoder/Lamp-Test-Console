@@ -3,12 +3,11 @@
 LampController::LampController(ReadFile& f, LedsController32& core, const ExternalFuncs& ex_funcs) :
     t_program(f),
     t_pr_controller(make_ProcedureController(t_program, core, ex_funcs)),
-    t_proc_fnc(t_pr_controller),
-    t_main_procedure(nullptr)
+    t_main_procedure(nullptr),
+    t_proc_fnc(t_pr_controller)
 {
     if (t_pr_controller.count()) {
-        auto empty_array = CharArray(0);
-        t_main_procedure = t_pr_controller.call_procedure(0, CharArrayView(empty_array), ArgsArray(0), t_proc_fnc);
+        t_main_procedure = t_pr_controller.call_procedure(0, CharArrayConstView(CharArray(0)), ArgsArray(0), t_proc_fnc);
     }
     core.clear();
 }
@@ -30,10 +29,6 @@ bool LampController::update()
     return false;
 }
 
-const String& LampController::get_name()const {
-    return t_program.get_name();
-}
-
 void LampController::stop()
 {
     if (t_main_procedure) t_main_procedure->stop();
@@ -43,7 +38,7 @@ LampController::CallProcedureWController::CallProcedureWController(ProcedureCont
     t_controller(controller) 
     {}
 
-Procedure* LampController::CallProcedureWController::operator()(::byte id, CharArrayView args, const ArgsArray& args_arr)
+Procedure* LampController::CallProcedureWController::operator()(::byte id, CharArrayConstView args, const ArgsArray& args_arr)
 {
     return t_controller.call_procedure(id, args, args_arr, *this);
 }

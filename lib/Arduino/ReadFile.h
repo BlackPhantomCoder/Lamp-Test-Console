@@ -1,34 +1,25 @@
 #pragma once
 #include "Arduino.h"
-
 #include <fstream>
+
+//Emulating Simple File Interface
 class ReadFile {
 public:
-	ReadFile(std::ifstream& data, const String& filename) : t_data(data), t_name(filename) {
-		t_data.seekg(0, std::ios::end);
-		t_size = t_data.tellg();
-		t_data.seekg(0, std::ios::beg);
-	}
-	void seek(unsigned long pos) {
-		t_data.clear();
-		t_data.seekg(pos);
+	ReadFile(const ReadFile&) = delete;
+	ReadFile(ReadFile&& rh)noexcept = default;
 
-	}
-	unsigned long tell() {
-		return static_cast<unsigned long>(t_data.tellg());
-	}
-	const String& get_name()const {
-		return t_name;
-	}
-	unsigned long size()const {
-		return static_cast<unsigned long>(t_size);
-	}
+	ReadFile(std::ifstream& data, const String& filename);
 
-	char read() {
-		char result;
-		t_data.read(&result, 1);
-		return result;
-	}
+	ReadFile& operator=(const ReadFile&) = delete;
+
+	//seek
+	void seek(unsigned long pos);
+	//tell
+	unsigned long tell();
+	//get name
+	const String& get_name()const;
+	//read byte
+	char read();
 private:
 	String t_name;
 	std::ifstream& t_data;

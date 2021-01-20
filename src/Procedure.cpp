@@ -2,6 +2,20 @@
 #include "Funcs/Funcs.h"
 #include "Types/ProcedureCallTypes.h"
 
+Procedure::Procedure(Procedure&& rh) :
+    t_program(rh.t_program),
+    t_ram(rh.t_ram),
+    t_executer(rh.t_executer),
+    t_stop(rh.t_stop),
+    t_args_container(rh.t_args_container),
+    t_args(rh.t_args),
+    t_begin(rh.t_begin),
+    t_sub_procedure({  rh.t_sub_procedure.first, rh.t_sub_procedure.second })
+{
+    rh.t_sub_procedure.first = nullptr;
+    rh.t_sub_procedure.second = 0;
+}
+
 Procedure::Procedure(Program& program, const RAM& ram, ExternalFuncs& ex_funcs, call_procedure_fnc call_fnc) :
     t_program(program),
     t_ram(ram),
@@ -87,7 +101,7 @@ command Procedure::t_execute()
     t_executer.update();
     command cmd = command::nop;
     t_program.get_cmd(cmd, t_args_container);
-    t_args = CharArrayView(t_args_container);
+    t_args = CharArrayConstView(t_args_container);
     auto try_result = try_another(cmd, processor_type::simple_processor);
     if (!try_result.first) {
         t_simple_process(cmd);
@@ -168,7 +182,7 @@ command Procedure::t_if_process()
 
         if (t_program.peek_cmd() == command::else_) {
             auto args = t_program.get_cmd().second;
-            skip_count = t_ram.get_val(CharArrayView(args));
+            skip_count = t_ram.get_val(CharArrayConstView(args));
             t_program.skip(skip_count);
         }
     }
@@ -176,7 +190,7 @@ command Procedure::t_if_process()
         t_program.skip(skip_count);
         if (t_program.peek_cmd() == command::else_) {
             auto args = t_program.get_cmd().second;
-            skip_count = t_ram.get_val(CharArrayView(args));
+            skip_count = t_ram.get_val(CharArrayConstView(args));
             auto pos = t_program.get_next_pos() + skip_count;
             while (t_program.get_next_pos() != pos && !t_is_stop()) {
                 cmd = t_execute();

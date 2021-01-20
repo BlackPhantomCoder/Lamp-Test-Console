@@ -2,26 +2,33 @@
 #include "Arduino.h"
 #include "Array.h"
 
+//Array of char
 using CharArray = Array<char, ::byte>;
 
-class CharArrayView
+//read-only view
+class CharArrayConstView
 {
 public:
-    CharArrayView(CharArray& arr) : t_data(&arr), t_left(0), t_right(0) {}
-    char& operator[](::byte i) { return (*t_data)[i + t_left]; }
-    char operator[](::byte i)const { return (*t_data)[i + t_left]; }
-    void remove_beg(::byte val) { t_left += val; }
-    void remove_end(::byte val) { t_right += val; }
-    CharArrayView& operator=(const CharArrayView& rh) {
-        t_data = rh.t_data;
-        t_left = rh.t_left;
-        t_right = rh.t_right;
-        return *this;
-    }
+    CharArrayConstView(const CharArrayConstView&) = default;
 
-    ::byte size()const { return (*t_data).size() - t_left - t_right; }
+    CharArrayConstView(const CharArray& arr);
+    ~CharArrayConstView() = default;
+
+    CharArrayConstView& operator=(const CharArrayConstView& rh) = default;
+
+    //read element from view
+    char operator[](::byte i)const;
+    //remove element from begin of view
+    void remove_beg(::byte val);
+    //remove element from end of view
+    void remove_end(::byte val);
+    //size of available elements
+    ::byte size()const;
 private:
-    CharArray* t_data;
+    //data array
+    const CharArray* t_data;
+    //left offset
     ::byte t_left;
+    //right offset
     ::byte t_right;
 };
