@@ -23,20 +23,6 @@ CharArrayConstView get_argby(CharArrayConstView str, char symbol)
     return result;
 }
 
-CharArrayConstView get_arg_ref(CharArrayConstView& str, ::byte offset)
-{
-    CharArrayConstView result(str);
-    result.remove_end(str.size() - offset);
-    str.remove_beg(offset);
-    return result;
-}
-
-types get_types_ref(CharArrayConstView& arg) {
-    char result = arg[0];
-    arg.remove_beg(1);
-    return types(result);
-}
-
 exdata_type get_exdtype_ref(CharArrayConstView& arg) {
     char result = arg[0];
     arg.remove_beg(1);

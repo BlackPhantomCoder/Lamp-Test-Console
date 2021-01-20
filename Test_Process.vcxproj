@@ -163,7 +163,7 @@
     <ClCompile Include="src\Program.cpp" />
     <ClCompile Include="src\RAM.cpp" />
     <ClCompile Include="Source.cpp" />
-    <ClCompile Include="src\TypeController.cpp" />
+    <ClCompile Include="src\Data\TypeController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\Arduino\Arduino.h" />
